@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** Epi-Graphical-C-Template
 ** File description:
-** project
+** bsmyworld
 */
 
 #include "../include/csfml_include.h"
@@ -10,7 +10,7 @@
 #include "../include/my_graphical.h"
 #include "../include/struct_fb.h"
 
-int project(void)
+int bsmyworld(void)
 {
     return 0;
 }

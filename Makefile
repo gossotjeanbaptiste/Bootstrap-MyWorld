@@ -6,7 +6,7 @@
 ##
 
 LIB = libmy.a libmy_graphical.a
-PROJECT_NAME = project
+PROJECT_NAME = bsmyworld
 MY_LIB = -lmy -lmy_graphical
 CSFML_LIB = -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio \
 -lcsfml-system -lcsfml-network

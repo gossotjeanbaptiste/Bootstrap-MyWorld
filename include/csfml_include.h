@@ -17,5 +17,5 @@
     #define INCLUDED_CSFML_INCLUDE_H
 
 int main(int ac, char **av);
-int project(void);
+int bsmyworld(void);
 #endif /* !INCLUDED_CSFML_INCLUDE_H */
