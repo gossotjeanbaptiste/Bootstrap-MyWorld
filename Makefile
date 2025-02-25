@@ -7,7 +7,7 @@
 
 LIB = libmy.a libmy_graphical.a
 PROJECT_NAME = bsmyworld
-MY_LIB = -lmy -lmy_graphical
+MY_LIB = -lmy -lmy_graphical -lm
 CSFML_LIB = -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio \
 -lcsfml-system -lcsfml-network
 FLAGS = -Wall -Wextra -Wimplicit -O3
@@ -33,8 +33,8 @@ libmy.a:
 compile: $(OBJ)
 		gcc -o $(PROJECT_NAME) $(OBJ) $(INCL) $(LIB_COMP) $(CSFML_LIB) $(FLAGS)
 
-segfault : $(OBJ)
-		gcc -o $(PROJECT_NAME) -g $(OBJ) $(INCL) $(LIB_COMP) $(CSFML_LIB) \
+segfault : libmy.a
+		gcc -o $(PROJECT_NAME) -g $(SRC) $(INCL) $(LIB_COMP) $(CSFML_LIB) \
 		$(FLAGS)
 
 clean:
