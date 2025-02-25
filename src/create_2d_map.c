@@ -6,25 +6,39 @@
 */
 #include "../include/csfml_include.h"
 
-sfVector2f project_iso_point(int x, int y, int z)
+static sfVector2f **creating_the_map
+(map_creator_t *map_create, const int map[MAP_Y][MAP_X])
 {
-    float angle_x = 45.0 * M_PI / 180.0;
-    float angle_y = 35.0 * M_PI / 180.0;
-    sfVector2f point_2d;
-
-    point_2d.x = cos(angle_x) * x - cos(angle_x) * y;
-    point_2d.y = sin(angle_y) * y + sin(angle_y) * x - z;
-
-    return point_2d;
+    if (!map_create->map_2d)
+        return NULL;
+    for (int y = 0; y < MAP_Y; y++) {
+        map_create->map_2d[y] = malloc(sizeof(sfVector2f) * MAP_X);
+        if (!map_create->map_2d[y])
+            return NULL;
+        for (int x = 0; x < MAP_X; x++) {
+            map_create->z = map[y][x];
+            map_create->map_2d[y][x] = project_iso_point
+            (x * TILE_SIZE, y * TILE_SIZE, map_create->z * TILE_SIZE);
+            map_create->map_2d[y][x].x += map_create->offset_x;
+            map_create->map_2d[y][x].y += map_create->offset_y;
+        }
+    }
+    return map_create->map_2d;
 }
 
-int main(void)
+sfVector2f **create_2d_map(const int map[MAP_Y][MAP_X])
 {
-    int x = 1653;
-    int y = 453;
-    int z = 873;
-    sfVector2f projected = project_iso_point(x, y, z);
+    map_creator_t *map_create = malloc(sizeof(map_creator_t));
 
-    printf("Projected point: (%.2f, %.2f)\n", projected.x, projected.y);
-    return 0;
+    map_create->map_2d = malloc(sizeof(sfVector2f *) * MAP_Y);
+    map_create->top_left = project_iso_point(0, 0, 0);
+    map_create->bottom_right = project_iso_point
+    ((MAP_X - 1) * TILE_SIZE, (MAP_Y - 1) * TILE_SIZE, 0);
+    map_create->grid_width =
+    map_create->bottom_right.x - map_create->top_left.x;
+    map_create->grid_height =
+    map_create->bottom_right.y - map_create->top_left.y;
+    map_create->offset_x = (WINDOW_WIDTH - map_create->grid_width) / 2;
+    map_create->offset_y = (WINDOW_HEIGHT - map_create->grid_height) / 2;
+    return creating_the_map(map_create, map);
 }

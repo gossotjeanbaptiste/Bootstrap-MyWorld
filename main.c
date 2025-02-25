@@ -10,21 +10,37 @@
 #include "include/struct_fb.h"
 #include "include/ansi_color_code.h"
 
-int main(int ac, char **av)
+extern const int map[MAP_Y][MAP_X];
+
+
+static void event_handler(sfEvent event, sfRenderWindow *window)
 {
-    if (ac != 2) {
-        return 84;
+    while (sfRenderWindow_pollEvent(window, &event)) {
+        if (event.type == sfEvtClosed)
+            sfRenderWindow_close(window);
     }
-    if (av[1][0] == '-' && av[1][1] == 'h') {
-        mini_printf(MAG"Project: \n"
-        BRED"\tGame type : To complete \n"
-        BLU"\tInspired Game : Is there an inspired game ? \n"
-        GRN"\tCreated by Jean-Baptiste GOSSOT, Epitech Nancy PGE 2029\n"
-        BGRN"\t©JustWirelessInc. 2021-2029\n"COLOR_RESET);
-    } else {
-        mini_printf(BRED"Unknown argument, please use '-h' for complementary "
-        "information.\n"
-        "To start the game please do './my_hunter'.\n"COLOR_RESET);
+}
+
+int main(void)
+{
+    sfRenderWindow *window;
+    sfVideoMode mode = {WINDOW_WIDTH, WINDOW_HEIGHT, 32};
+    sfVector2f **map_2d = create_2d_map(map);
+    sfEvent event;
+
+    window = sfRenderWindow_create
+    (mode, "Centered Isometric Grid", sfResize | sfClose, NULL);
+    if (!window || !map_2d)
+        return EXIT_FAILURE;
+    while (sfRenderWindow_isOpen(window)) {
+        event_handler(event, window);
+        sfRenderWindow_clear(window, sfBlack);
+        draw_2d_map(window, map_2d);
+        sfRenderWindow_display(window);
     }
-    return 0;
+    for (int y = 0; y < MAP_Y; y++)
+        free(map_2d[y]);
+    free(map_2d);
+    sfRenderWindow_destroy(window);
+    return EXIT_SUCCESS;
 }
